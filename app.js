@@ -12,19 +12,17 @@ var config = require('./config/db');
 var configMqtt = require('./config/mqtt');
 
 
-var client = mqtt.connect(configMqtt.mqttConnectionUrl);
-
+var client = mqtt.connect(configMqtt.mqttConnectionUrl, {clientId: 'Smart Home Client'});
 
 client.on("connect", function () {
-    client.subscribe("testTopic");
-    console.log("connected to MQTT Server");
+         client.subscribe("testTopic");
+    		console.log("connected to MQTT Server");
 });
 
 client.on('message', function (topic, message) {
   // message is Buffer
   mqttController.handleTopic(topic,message);
 })
-
 
 var smartobjectRouter = require('./routes/smartobject');
 var webApplicationRouter = require('./routes/webapplication');
@@ -67,13 +65,6 @@ app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Database
-//let db = new sqlite3.Database('./smarthome.db', (err) => {
- // if (err) {
-   // console.error(err.message);
-  //}
-  //console.log('Connected to the SmartHome database.');
-//});
 
 
 // catch 404 and forward to error handler
