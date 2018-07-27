@@ -9,5 +9,4 @@ var Schema = mongoose.Schema;
 module.exports = mongoose.model('Sensor', {
     name : {type : String, default: ''},
     description : {type : String, default: ''},
-    unit : {type : String, default: ''}
 });

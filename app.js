@@ -5,13 +5,18 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var mqttController = require('./mqtt/controller');
+
 var mqtt = require("mqtt");
+
+// MQTT Controller
+var mqttController = require('./mqtt/controller');
+
 // config files
 var config = require('./config/db');
 var configMqtt = require('./config/mqtt');
 
 
+//TODO COS: Refactor
 var client = mqtt.connect(configMqtt.mqttConnectionUrl, {clientId: 'Smart Home Client'});
 
 client.on("connect", function () {
@@ -24,9 +29,14 @@ client.on('message', function (topic, message) {
   mqttController.handleTopic(topic,message);
 })
 
+
+// Add Router
 var smartobjectRouter = require('./routes/smartobject');
-var webApplicationRouter = require('./routes/webapplication');
 var sensorRouter = require('./routes/sensor');
+var sensorValueRouter = require('./routes/sensorValue');
+
+var webApplicationRouter = require('./routes/webapplication');
+
 
 
 mongoose.connect(config.connectionurl);
@@ -57,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/smartobject', smartobjectRouter);
 app.use('/webapp', webApplicationRouter);
 app.use('/sensor', sensorRouter);
+app.use('/sensorValue', sensorValueRouter);
 
 
 // support parsing of application/json type post data
