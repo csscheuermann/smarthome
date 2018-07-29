@@ -2,7 +2,7 @@
 <!doctype html>
 
 <!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="smartHome">
+<html ng-app="smartHome" ng-controller="mainController">
 <head>
     <!-- META -->
     <meta charset="utf-8">
@@ -10,7 +10,7 @@
 
     <title>Node/Angular Todo App</title>
      <!-- SCROLLS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         html                    { overflow-y:scroll; }
         body                    { padding-top:50px; }
@@ -19,7 +19,7 @@
 
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script><!-- load angular -->
     <script src="core.js"></script>
 
 	<!-- Needed for the Charts -->
@@ -53,12 +53,12 @@ window.onload = function() {
 	</script>
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
-<body ng-controller="mainController">
+<body>
     <div class="container">
 
         <!-- HEADER AND TODO COUNT -->
         <div class="jumbotron text-center">
-            <h1>I'm a Todo-aholic <span class="label label-info">{{ smartobjects.length }}</span></h1>
+            <h3>Currents Number of Smart Objects <span class="label label-info">{{ smartobjects.length }}</span></h3>
         </div>
 
         <!-- TODO LIST -->
@@ -66,11 +66,19 @@ window.onload = function() {
             <div class="col-sm-4 col-sm-offset-4">
 
                 <!-- LOOP OVER THE TODOS IN $scope.todos -->               
-                <div class="checkbox" ng-repeat="smartobject in smartobjects">
-                    <label>
-                        <input type="checkbox"> {{ smartobject._id }} // {{ smartobject.name }}
-                    </label>
-                </div>
+         			<div class="panel panel-default" ng-repeat="smartobject in smartobjects">
+  								 	<div class="panel-heading">{{smartobject.name}}</div>							
+  									<div class="panel-body">
+											<ul>
+												<li ng-repeat="sensor in smartobject._sensorIds">		{{sensor.name}}</li> 									
+											</ul>	
+  										
+  											</div>
+  										</div>
+							</div>                    
+                    
+                    
+         
 
             </div>
         </div>

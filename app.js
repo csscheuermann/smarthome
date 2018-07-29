@@ -36,6 +36,8 @@ var sensorRouter = require('./routes/sensor');
 var sensorValueRouter = require('./routes/sensorValue');
 
 var webApplicationRouter = require('./routes/webapplication');
+var seedRouter = require('./routes/seed');
+
 
 
 
@@ -68,6 +70,7 @@ app.use('/smartobject', smartobjectRouter);
 app.use('/webapp', webApplicationRouter);
 app.use('/sensor', sensorRouter);
 app.use('/sensorValue', sensorValueRouter);
+app.use('/initializeDatabase', seedRouter);
 
 
 // support parsing of application/json type post data
