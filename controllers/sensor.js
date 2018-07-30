@@ -8,7 +8,6 @@ exports.add = function(req, res) {
     		if (err) return console.error(err);
   					res.send(sensor);
  			 });
-   
 };
 
 exports.getAll = function(req, res) {
@@ -16,7 +15,6 @@ exports.getAll = function(req, res) {
     		if (err) return console.error(err);
   					res.send(sensor);
  			 });
-   
 };
 
 

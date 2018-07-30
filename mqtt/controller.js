@@ -11,7 +11,7 @@ module.exports = {
 };
 
 var zemba = function () {
-	   console.log("I Will print something as well");
+	   logger.info("I Will print something as well");
 }
 
 

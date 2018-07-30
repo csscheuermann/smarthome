@@ -6,6 +6,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
+
 var mqtt = require("mqtt");
 
 // MQTT Controller
@@ -20,9 +21,18 @@ var configMqtt = require('./config/mqtt');
 var client = mqtt.connect(configMqtt.mqttConnectionUrl, {clientId: 'Smart Home Client'});
 
 client.on("connect", function () {
-         client.subscribe("testTopic");
-    		console.log("connected to MQTT Server");
+				   client.subscribe("testTopic");
+    				console.log("Connected to MQTT Server");
 });
+
+client.on('error', function(err){
+  	console.log("Problem with MQTT Connection, you might have to start the MQTT broker or set the connection string right." + err);
+});
+
+client.on('close',function(){
+console.log("Client could not connect,client disconnected");
+});
+
 
 client.on('message', function (topic, message) {
   // message is Buffer
@@ -39,10 +49,7 @@ var webApplicationRouter = require('./routes/webapplication');
 var seedRouter = require('./routes/seed');
 
 
-
-
 mongoose.connect(config.connectionurl);
-
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -58,7 +65,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

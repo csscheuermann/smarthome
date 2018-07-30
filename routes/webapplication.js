@@ -5,5 +5,4 @@ var webApplicationController = require('../controllers/webapplication');
 
 router.get('/', webApplicationController.showFirstPage)
 
-
 module.exports = router;
