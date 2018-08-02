@@ -18,25 +18,25 @@ var configMqtt = require('./config/mqtt');
 
 
 //TODO COS: Refactor
-var client = mqtt.connect(configMqtt.mqttConnectionUrl, {clientId: 'Smart Home Client'});
+var client = mqtt.connect(configMqtt.mqttConnectionUrl, { clientId: 'Smart Home Client' });
 
 client.on("connect", function () {
-				   client.subscribe("testTopic");
-    				console.log("Connected to MQTT Server");
+  client.subscribe("testTopic");
+  console.log("Connected to MQTT Server");
 });
 
-client.on('error', function(err){
-  	console.log("Problem with MQTT Connection, you might have to start the MQTT broker or set the connection string right." + err);
+client.on('error', function (err) {
+  console.log("Problem with MQTT Connection, you might have to start the MQTT broker or set the connection string right." + err);
 });
 
-client.on('close',function(){
-console.log("Client could not connect,client disconnected");
+client.on('close', function () {
+  console.log("Client could not connect,client disconnected");
 });
 
 
 client.on('message', function (topic, message) {
   // message is Buffer
-  mqttController.handleTopic(topic,message);
+  mqttController.handleTopic(topic, message);
 })
 
 
@@ -53,8 +53,8 @@ mongoose.connect(config.connectionurl);
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
- 
-db.once('open', function() {
+
+db.once('open', function () {
   console.log("Connection to " + config.mongodatabase + " Successfully established.");
 });
 
@@ -89,12 +89,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

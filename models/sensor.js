@@ -7,6 +7,6 @@ var Schema = mongoose.Schema;
 
 // module.exports allows us to pass this to other files when it is called
 module.exports = mongoose.model('Sensor', {
-    name : {type : String, default: ''},
-    description : {type : String, default: ''},
+    name: { type: String, default: '' },
+    description: { type: String, default: '' },
 });

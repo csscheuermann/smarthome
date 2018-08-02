@@ -9,8 +9,8 @@ var Sensor = require('../models/sensor');
 
 // module.exports allows us to pass this to other files when it is called
 module.exports = mongoose.model('SmartObject', {
-    name : {type : String, default: ''},
-    description : {type : String, default: ''},
-        _sensorIds : [ {  type: Schema.Types.ObjectId,  ref: 'Sensor', index: true } ]
+    name: { type: String, default: '' },
+    description: { type: String, default: '' },
+    _sensorIds: [{ type: Schema.Types.ObjectId, ref: 'Sensor', index: true }]
 });
 
