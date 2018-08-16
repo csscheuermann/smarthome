@@ -14,13 +14,10 @@ exports.init = function (req, res) {
 	SensorValue.collection.drop();
 	Sensor.collection.drop();
 	SmartObject.collection.drop();
-	//   var count;
-	//      document.write("Starting Loop" + "<br />");
-	// for(count = 0; count < 10; count++){
 
 	var sensors = [
-		{ name: 'Temperature TP33XYZ', description: 'Rugged Temperature Sensor', unit: 'Celcius' },
-		{ name: 'Temperature TP9876', description: 'Rugged Temperature Sensor', unit: 'Celcius' }
+		{ name: 'Ultraschall JSN-SR04T', description: 'Waterproof  Sensor', unit: 'Liter' }
+		//{ name: 'Temperature TP9876', description: 'Rugged Temperature Sensor', unit: 'Celcius' }
 	];
 
 	Sensor.collection.insert(sensors, function (err, docsInserted) {
@@ -40,8 +37,8 @@ exports.init = function (req, res) {
 			console.log("Added Sensor " + JSON.stringify(smartObject));
 		});
 
-		addSensorValues(sensorIds[0]);
-		addSensorValues(sensorIds[1]);
+		//addSensorValues(sensorIds[0]);
+		//addSensorValues(sensorIds[1]);
 
 	});
 
@@ -49,7 +46,7 @@ exports.init = function (req, res) {
 		var numberOfSensorValues = 9;
 		var i;
 		for (i = 0; i < numberOfSensorValues; i++) {
-			var d = new Date("2018-07-23T1" + i + ":24:00");
+			var d = new Date("201"+i+"-07-23T1" + i + ":24:00");
 			var sensorValue = new SensorValue({ value: Math.floor((Math.random() * 10) + 1), unit: "Liter", sensorId: sensorId, date: d });
 			sensorValue.save(function (err, sensorValue) {
 				if (err) return logger.error(err);
