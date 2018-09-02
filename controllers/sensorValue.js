@@ -32,6 +32,7 @@ exports.saveSensorValue = function (value, unit, sensorId) {
 exports.getAll = function (req, res) {
 	SensorValue.find({}, function (err, sensorValue) {
 		if (err) return console.error(err);
+
 		res.send(sensorValue);
 	});
 
@@ -76,9 +77,9 @@ db.sales.aggregate(
 */
 
 
-
+//.sort('date')
 exports.getValuesBySensorId = function (req, res) {
-	SensorValue.find({ 'sensorId': req.params.id }).sort('date').exec(function (err, sensorValue) {
+	SensorValue.find({ 'sensorId': req.params.id}).exec(function (err, sensorValue) {
 		if (err) return console.error(err);
 		res.send(JSON.stringify(sensorValue));
 	})

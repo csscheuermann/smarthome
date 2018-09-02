@@ -77,7 +77,7 @@ angular.module('smartHome', []).
 		
 
             function createChartConfigFromSensorValues(dataValues) {
-          
+      
                 var count;
                $scope.labels = new Array();
                $scope.values = new Array();
@@ -103,8 +103,8 @@ angular.module('smartHome', []).
                         datasets: [{
                             label: "My First dataset",
                             lineTension: 0,
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgb(96, 125, 139)',
+                            borderColor: 'rgb(179, 229, 255)',
                             data: $scope.values,
                         }]
                     },
@@ -136,6 +136,10 @@ angular.module('smartHome', []).
                 };
                 
                    var ctx = document.getElementById('myChart').getContext('2d');
+                  if($scope.chart ){
+                
+                  $scope.chart.update();
+                  }
 						$scope.chart = new Chart(ctx, config);            
                      window.myLine =  $scope.chart;
                         
