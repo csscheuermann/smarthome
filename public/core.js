@@ -8,7 +8,7 @@ angular.module('smartHome', []).
         	
 //TODO COS: SensorValues Distinc select on years && implement ng-hide
     $scope.filterYear = [];
-
+$scope.currentSmartObject ={};
 
  
     $scope.$watch('form.type',  function(data) {
@@ -34,15 +34,26 @@ angular.module('smartHome', []).
 
 
 
-            $scope.loadChart = function loadChart(id) {
+            $scope.loadChart = function loadChart(id, sensorName) {
 
                 //Get the Sensor Values
-                getSensorValues(id);
+                getSensorValues(id,sensorName);
 						fillDropDown(id);
                 //Create dataChart Config
 
 
             }
+            $scope.isEmpty = function (obj) {
+    for (var i in obj) if (obj.hasOwnProperty(i)) return false;
+    return true;
+};
+            $scope.loadSmartObject = function loadSmartObject(index){
+           
+					$scope.currentSmartObject =    $scope.smartobjects[index];
+					$scope.latestValue = null;
+	}
+	
+	
 
 				function fillDropDown(id){
      				$http.get('sensorValue/'+id._id+'/years')
@@ -57,7 +68,7 @@ angular.module('smartHome', []).
                 });				
 				}
 
-            function getSensorValues(id) {
+            function getSensorValues(id,sensorName) {
                 $http.get('/sensorValue/' + id._id)
                     .then(function (result) {
 
@@ -65,7 +76,7 @@ angular.module('smartHome', []).
                         console.log($scope.sensorDataValues);
                         
                       
-                        var config = createChartConfigFromSensorValues($scope.sensorDataValues);
+                        var config = createChartConfigFromSensorValues($scope.sensorDataValues,sensorName);
                         //Draw Chart		
                      
                        
@@ -74,24 +85,28 @@ angular.module('smartHome', []).
                         console.log(result);
                     });
             };
+
 		
 
-            function createChartConfigFromSensorValues(dataValues) {
+            function createChartConfigFromSensorValues(dataValues, sensorName) {
       
                 var count;
                $scope.labels = new Array();
                $scope.values = new Array();
 					$scope.years = new Array()
+					
+					$scope.latestValue = dataValues[dataValues.length-1];
                 for (count = 0; count < dataValues.length; count++) {
                    $scope.labels.push(dataValues[count].date);
 							$scope.values.push(dataValues[count].value);
+							
                 }
                 console.log($scope.labels);
                 console.log($scope.values);
-                return createConfig($scope.labels, $scope.values);
+                return createConfig($scope.labels, $scope.values,sensorName);
             }
 
-            function createConfig(labels, values) {
+            function createConfig(labels, values,sensorName) {
 
                 var config = {
                     // The type of chart we want to create
@@ -101,7 +116,7 @@ angular.module('smartHome', []).
                     data: {
                         labels: $scope.labels,
                         datasets: [{
-                            label: "My First dataset",
+                            label:sensorName,
                             lineTension: 0,
                             backgroundColor: 'rgb(96, 125, 139)',
                             borderColor: 'rgb(179, 229, 255)',
