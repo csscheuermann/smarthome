@@ -32,7 +32,9 @@ $scope.currentSmartObject ={};
                     console.log(result);
                 });
 
-
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
 
             $scope.loadChart = function loadChart(id, sensorName) {
 
