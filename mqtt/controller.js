@@ -5,7 +5,7 @@ var sensorValueController = require('../controllers/sensorValue');
 module.exports = {
   handleTopic: function (topic, message) {
      console.log(topic.toString() + message.toString());
-     if (topic == "sensorvalue"){
+     if (topic == "sensor/value"){
 				  handleSensorValue(message);   
      }else{
    	console.log("I will do nothing, topic is unknown to me.");     

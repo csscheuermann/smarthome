@@ -1,6 +1,8 @@
 var SensorValue = require('../models/sensorValue');
 var mongoose = require('mongoose');
 
+const ObjectId = mongoose.Types.ObjectId; 
+
 const aggregatorOpts = [
 
       {
@@ -9,10 +11,9 @@ const aggregatorOpts = [
            count: { $sum: 1 }
         }
       }
-
-   
-   
 ]
+
+
 
 exports.add = function (req, res) {
 
@@ -45,41 +46,46 @@ SensorValue.aggregate(aggregatorOpts, function(err, sensorValue){
 		res.send(JSON.stringify(sensorValue));
 	})
 	};
-/*
+
+// Get documents by year
 
 
-const aggregatorOpts = [{
-        $unwind: "$items"
+exports.getValuesBySensorIdandYear = function (req, res) {
+SensorValue.aggregate(getByYearsOpts, function(err, sensorValue){
+		if (err) return console.error(err);
+		res.send(JSON.stringify(sensorValue));
+	})
+	};
+	
+	
+exports.getValuesBySensorIdandYear = function (req, res) {
+SensorValue.aggregate( [
+    { $project :
+       {
+         year_measured : { $year : "$date" },
+         value : "$value",
+         date : "$date",
+         unit : "$unit",
+         _id : 0,
+         sensorId: '$sensorId'
+       }
     },
-    {
-        $group: {
-            _id: "$items.productId",
-            count: { $sum: 1 }
-        }
-    }
-]
+    { $sort : { date : -1 } },
+    { $match : { year_measured: parseInt(req.params.year), 'sensorId' :  ObjectId(req.params.id)}}
+  ], function(err, sensorValue){
+		if (err) return console.error(err);
+		res.send(JSON.stringify(sensorValue));
+	})
+	};
+	
 
-Model.aggregate(aggregatorOpts).exec()
-
-db.sales.aggregate(
-   [
-      {
-        $group : {
-           _id : { month: { $month: "$date" }, day: { $dayOfMonth: "$date" }, year: { $year: "$date" } },
-           totalPrice: { $sum: { $multiply: [ "$price", "$quantity" ] } },
-           averageQuantity: { $avg: "$quantity" },
-           count: { $sum: 1 }
-        }
-      }
-   ]
-)
-
-*/
-
-
-//.sort('date')
 exports.getValuesBySensorId = function (req, res) {
-	SensorValue.find({ 'sensorId': req.params.id}).exec(function (err, sensorValue) {
+	var limit = 200;
+	if (req.params.limit){
+		limit = req.params.limit;
+	}	
+ 
+	SensorValue.find({ 'sensorId': req.params.id}).sort({date: -1}).limit(limit).exec(function (err, sensorValue) {
 		if (err) return console.error(err);
 		res.send(JSON.stringify(sensorValue));
 	})

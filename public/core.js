@@ -13,14 +13,19 @@ $scope.currentSmartObject ={};
  
     $scope.$watch('form.type',  function(data) {
      if(data){ 
-           var arr = [];
-           angular.forEach($scope.sensorDataValues, function(v){
-             if(new Date(v.date).getFullYear()=== data){
-               arr.push(v);
-             }
-           })
-           createChartConfigFromSensorValues(arr);
-    }}   
+        $http.get('/sensorValue/'+	$scope.currentIdSensorSelected._id+'/year/'+data)
+                .then(function (result) {
+                	      paintChart( createChartConfigFromSensorValues(result.data, data));
+                	      
+ 
+                    console.log(result);
+                }, function (result) {
+                    //some error
+                    console.log(result);
+                });
+                
+              }}    
+      
     );
   
             $http.get('/smartobject')
@@ -36,15 +41,23 @@ $scope.currentSmartObject ={};
         $('#sidebar').toggleClass('active');
     });
 
-            $scope.loadChart = function loadChart(id, sensorName) {
+
+  	
+  	
+  	
+            $scope.loadChart = function loadChart(id, sensorName,limit) {
+            	$scope.currentIdSensorSelected = id;
 
                 //Get the Sensor Values
-                getSensorValues(id,sensorName);
+                getSensorValues(id,sensorName,limit);
 						fillDropDown(id);
                 //Create dataChart Config
 
 
             }
+            
+            
+            
             $scope.isEmpty = function (obj) {
     for (var i in obj) if (obj.hasOwnProperty(i)) return false;
     return true;
@@ -70,47 +83,52 @@ $scope.currentSmartObject ={};
                 });				
 				}
 
-            function getSensorValues(id,sensorName) {
-                $http.get('/sensorValue/' + id._id)
+            
+                function getSensorValues(id,sensorName,limit) {
+                $http.get('/sensorValue/' + id._id+"/limit/"+limit)
                     .then(function (result) {
-
   								$scope.sensorDataValues = result.data;
                         console.log($scope.sensorDataValues);
-                        
-                      
-                        var config = createChartConfigFromSensorValues($scope.sensorDataValues,sensorName);
-                        //Draw Chart		
-                     
-                       
+                        paintChart(  createChartConfigFromSensorValues($scope.sensorDataValues,sensorName));
                     }, function (result) {
                         //some error
                         console.log(result);
                     });
             };
+            
+            
 
-		
+		function paintChart(config){
+   		var ctx = document.getElementById('myChart').getContext('2d'); 	
+								if($scope.chart){
+										$scope.chart.destroy();
+								}								
+								$scope.chart = new Chart(ctx, config);      
+								$scope.chart.update();		      
+                     	window.myLine =  $scope.chart;
+		}
 
             function createChartConfigFromSensorValues(dataValues, sensorName) {
-      
-                var count;
+               var count;
                $scope.labels = new Array();
                $scope.values = new Array();
 					$scope.years = new Array()
 					
-					$scope.latestValue = dataValues[dataValues.length-1];
+					$scope.latestValue = dataValues[0];
                 for (count = 0; count < dataValues.length; count++) {
-                   $scope.labels.push(dataValues[count].date);
+                   $scope.labels.push(dataValues[count].date.toLocaleString());
 							$scope.values.push(dataValues[count].value);
 							
                 }
-                console.log($scope.labels);
-                console.log($scope.values);
+
                 return createConfig($scope.labels, $scope.values,sensorName);
             }
 
+
+
             function createConfig(labels, values,sensorName) {
 
-                var config = {
+               return {
                     // The type of chart we want to create
                     type: 'line',
 
@@ -151,26 +169,9 @@ $scope.currentSmartObject ={};
 								}
                     }
                 };
-                
-                   var ctx = document.getElementById('myChart').getContext('2d');
-                  if($scope.chart ){
-                
-                  $scope.chart.update();
-                  }
-						$scope.chart = new Chart(ctx, config);            
-                     window.myLine =  $scope.chart;
-                        
-            
 
             }
-            
- 
-				
-  
-  
-  
-
-    
+   
         });
 
 

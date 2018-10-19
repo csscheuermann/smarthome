@@ -21,7 +21,7 @@ var configMqtt = require('./config/mqtt');
 var client = mqtt.connect(configMqtt.mqttConnectionUrl, { clientId: 'Smart Home Client' });
 
 client.on("connect", function () {
-  client.subscribe("sensorvalue");
+  client.subscribe("sensor/value");
   console.log("Connected to MQTT Server");
 });
 
@@ -35,7 +35,7 @@ client.on('close', function () {
 
 
 client.on('message', function (topic, message) {
-  // message is Buffer
+
   mqttController.handleTopic(topic, message);
 })
 

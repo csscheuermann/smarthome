@@ -110,11 +110,24 @@
   </div>           
              <div class="row">
              
-               <div class="col-sm-7">
+               <div class="col-sm-10">
    					<ul class="list-group">
-                        <li class="list-group-item" ng-repeat="sensor in currentSmartObject._sensorIds"  ng-click="loadChart(sensor,sensor.name);"> {{sensor.name}} ({{sensor._id}})</li>
+                        <li class="list-group-item" ng-repeat="sensor in currentSmartObject._sensorIds"  > 
+                        <div>{{sensor.name}} ({{sensor._id}})
+		<button  ng-click="loadChart(sensor,sensor.name,50);"> 50</button>
+	<button ng-click="loadChart(sensor,sensor.name,100);"> 100</button>
+		<button ng-click="loadChart(sensor,sensor.name,120);"> 120</button>
+	<button ng-click="loadChart(sensor,sensor.name,200);"> 200</button>
+	<button ng-click="loadChart(sensor,sensor.name,300);"> 300</button>
+	</div>
+                
+                        
+                        </li>
                    </ul>
   					</div>
+  					
+          
+            
             
              <div class="col-sm-2">
              	<h4 ng-show="latestValue != null"><span class="badge badge-secondary">{{latestValue.value}} {{latestValue.unit}}</span></h4>
@@ -125,13 +138,13 @@
                 
                 
           	<div class="row " ng-show="filterYear.length > 0"s>
-             	<div class="col-sm-4">
+             	<div class="col-sm-2">
              	<p> Filter Data</p>
              	</div>
-          	<div class="col-sm-6">
+          	<div class="col-sm-2">
         			<select  ng-model='form.type' required ng-options='option._id.year as option._id.year for option in filterYear'></select>
       		</div>
-      
+         
              </div>
        </div>
              
